@@ -3,11 +3,11 @@
 # Нужно проверить, является ли само число простым
 # Нужно проверить, является ли это число наибольшим простым
 
-MAIN_NUM = 600851475143
+value = 600851475143
 res, i = 0, 3
 
-while i * i < MAIN_NUM or res == 0:
-	if not(MAIN_NUM % i):
+while i * i < value or res == 0:
+	if not(value % i):
 		for z in range(2, i):
 			if not(i % z): break
 			if z + 1 == i: res = i
