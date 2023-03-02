@@ -14,7 +14,10 @@
 The prime factors of 13195 are 5, 7, 13 and 29.
 
 What is the largest prime factor of the number 600851475143 ?\
+
 [Оригинал](https://projecteuler.net/problem=3)
+
+<b>Ответ:</b> 6857
 
 ### Решения: 
 
@@ -83,7 +86,10 @@ where |n| is the modulus/absolute value of n
 e.g. |11| = 11 and |-4| = 4
 
 Find the product of the coefficients, a and b, for the quadric expression that produces the maximum number of primes for consecutive values of n, starting with n = 0.\
+
 [Оригинал](https://projecteuler.net/problem=27)
+
+<b>Ответ:</b> -59231
 ### Решения: 
 
 <b>Python:</b>
@@ -143,3 +149,5 @@ let rec findMaxSequenceInfSeq a b maxN res =
                     | false -> findMaxSequenceInfSeq (a + 1) -1000 maxN res
                     | true -> res  
 ```
+### Заключение: 
+Выполняя лабораторную работу на практике ознакомился с подходом к решению задач при помощи рекурсии, последовательностей (seq, Seq.initInfinite) и операций над ними (Seq.map, Seq.fold, Seq.filter и т.д.). Синтаксис языка оказался простым и к нему быстро привыкаешь, однако с ходу начать писать код на F# может быть затруднительно. Также повышал продуктивность FSI, позволяющий сразу же проводить тестирование кода после его написания. 
