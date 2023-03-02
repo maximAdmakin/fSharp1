@@ -22,7 +22,7 @@ What is the largest prime factor of the number 600851475143 ?
 ### Решения: 
 
 <b>Python:</b> \
-Проверяем все цифры до корня из $value$ и возвращаем наибольший делитель.
+Проверяем все цифры до $\sqrt{value}$ и возвращаем наибольший делитель.
 ```python
 while i * i < MAIN_NUM or res == 0:
 	if not(MAIN_NUM % i):
