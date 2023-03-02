@@ -40,12 +40,12 @@ let rec findMaxPrimeFactorTail (value: uint64) (i: uint64) (d: uint64) (res: uin
                         | 0UL -> findMaxPrimeFactorTail value (i + 1UL) 2UL i
                         | _ -> findMaxPrimeFactorTail value (i + 1UL) 2UL res
 ```
-<b>Seq.initInfinite:</b>
+<b>Seq.initInfinite, Seq.filter, Seq.fold:</b>
 ```f#
-let findPrimeFactorsInf (value: uint64) = 
+let findMaxPrimeFactorSeq (value: uint64) = 
     let isSimple n =
         let rec check i =
-            n > 0 && (i > n/2 || (n % i <> 0 && check (i + 1)))
+            i > n/2 || (n % i <> 0 && check (i + 1))
         check 2
 
     let numbers = Seq.initInfinite (fun index -> if index % 2 <> 0 then index else 0) 
@@ -53,7 +53,8 @@ let findPrimeFactorsInf (value: uint64) =
                 |> Seq.filter (fun index -> isSimple(index))
                 |> Seq.takeWhile (fun index -> (System.Convert.ToUInt64(index) * System.Convert.ToUInt64(index)) < value) 
                 |> Seq.filter (fun index -> value % System.Convert.ToUInt64(index) = 0UL)
-                |> Seq.last
+                |> Seq.fold (fun s e -> e::s) []
+                |> Seq.head
     
     numbers
 ```
@@ -114,7 +115,7 @@ for a in range(-1000, 1000):
 ```
 <b>Хвостовая рекурсия, Seq.initInfinite, Seq.map:</b>
 ```f#
-let rec findMaxSequenceTailInfSeqMap a b maxN res = 
+let rec findMaxSequenceInfSeq a b maxN res= 
     let isSimple n =
         let rec check i =
             n > 0 && (i > n/2 || (n % i <> 0 && check (i + 1)))
@@ -132,5 +133,5 @@ let rec findMaxSequenceTailInfSeqMap a b maxN res =
                     | true -> findMaxSequenceInfSeq a (b + 1) (howManyPrimes a b) (a * b)
         | true -> match (a >= 999) with
                     | false -> findMaxSequenceInfSeq (a + 1) -1000 maxN res
-                    | true -> res 
+                    | true -> res  
 ```
