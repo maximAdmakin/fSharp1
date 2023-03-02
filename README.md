@@ -18,7 +18,8 @@ What is the largest prime factor of the number 600851475143 ?\
 
 ### Решения: 
 
-<b>Python:</b>
+<b>Python:</b> \
+Проверяем все цифры до корня из value и возвращаем наибольший делитель.
 ```python
 while i * i < MAIN_NUM or res == 0:
 	if not(MAIN_NUM % i):
@@ -27,7 +28,8 @@ while i * i < MAIN_NUM or res == 0:
 			if z + 1 == i: res = i
 	i += 2
 ```
-<b>Хвостовая рекурсия:</b>
+<b>Хвостовая рекурсия:</b> \
+Примерный аналог Python-решения.
 ```f#
 let rec findMaxPrimeFactorTail (value: uint64) (i: uint64) (d: uint64) (res: uint64) = 
     match value > (i * i) with
@@ -40,7 +42,11 @@ let rec findMaxPrimeFactorTail (value: uint64) (i: uint64) (d: uint64) (res: uin
                         | 0UL -> findMaxPrimeFactorTail value (i + 1UL) 2UL i
                         | _ -> findMaxPrimeFactorTail value (i + 1UL) 2UL res
 ```
-<b>Seq.initInfinite, Seq.filter, Seq.fold:</b>
+<b>Seq.initInfinite, Seq.filter, Seq.fold:</b>\
+Создаем бесконечный список из нечетных чисел, заменяя четные на ноль, после чего убираем все нули. 
+Вырезаем из бесконечной последовательности часть, в которой все простые числа меньше корня из value, 
+после чего находим в новой последовательности простые числа, являющиеся делителями value. 
+В конце при помощи Seq.fold меняем элементы местами и возвращаем первый элемент. 
 ```f#
 let findMaxPrimeFactorSeq (value: uint64) = 
     let isSimple n =
@@ -81,6 +87,7 @@ Find the product of the coefficients, a and b, for the quadric expression that p
 ### Решения: 
 
 <b>Python:</b>
+Решение при помощи прохода и вычисления уравнения для всех значений, с итерированием n до нахождения первого составного числа. 
 ```python
 for a in range(-1000, 1000):
     for b in range(-1000, 1000):
@@ -114,8 +121,9 @@ for a in range(-1000, 1000):
             res = a * b
 ```
 <b>Хвостовая рекурсия, Seq.initInfinite, Seq.map:</b>
+Проходим по всем возможным комбинациям a и b. Длина последовательности из n находится путем создания бесконечного списка, содержащего в себе все значения выражения при итерировании n, после чего все составные значения меняются на ноль, для того, чтобы в последствии отделять часть последовательности до первого 0 и вернуть количество элементов последовательности. 
 ```f#
-let rec findMaxSequenceInfSeq a b maxN res= 
+let rec findMaxSequenceInfSeq a b maxN res = 
     let isSimple n =
         let rec check i =
             n > 0 && (i > n/2 || (n % i <> 0 && check (i + 1)))
