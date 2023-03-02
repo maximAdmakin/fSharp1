@@ -22,7 +22,7 @@ What is the largest prime factor of the number 600851475143 ?
 ### Решения: 
 
 <b>Python:</b> \
-Проверяем все цифры до корня из value и возвращаем наибольший делитель.
+Проверяем все цифры до корня из $value$ и возвращаем наибольший делитель.
 ```python
 while i * i < MAIN_NUM or res == 0:
 	if not(MAIN_NUM % i):
@@ -47,8 +47,8 @@ let rec findMaxPrimeFactorTail (value: uint64) (i: uint64) (d: uint64) (res: uin
 ```
 <b>Seq.initInfinite, Seq.filter, Seq.fold:</b>\
 Создаем бесконечный список из нечетных чисел, заменяя четные на ноль, после чего убираем все нули. 
-Вырезаем из бесконечной последовательности часть, в которой все простые числа меньше корня из value, 
-после чего находим в новой последовательности простые числа, являющиеся делителями value. 
+Вырезаем из бесконечной последовательности часть, в которой все простые числа меньше $\sqrt{value}$, 
+после чего находим в новой последовательности простые числа, являющиеся делителями $value$. 
 В конце при помощи <b>Seq.fold</b> меняем элементы местами и возвращаем первый элемент. 
 ```f#
 let findMaxPrimeFactorSeq (value: uint64) = 
@@ -71,21 +71,22 @@ let findMaxPrimeFactorSeq (value: uint64) =
 
 Euler discovered the remarkable quadratic formula:
 
-```
+```math 
 n^2 + a * n + b
 ```
-It turns out that the formula will produce 40 primes for the consecutive integer values 0 <= n <= 39. However, when n = 40, 40^2 + 40 + 41 = 40(40 + 1) + 41 is divisible by 41, and certainly when n = 41, 41^2 + 41 + 41 is clearly divisible by 41. 
 
-The incredible formula n^2 - 79n + 1601 was discovered, which produces 80 primes for the consecutive values 0 <= n <= 79. The product of the coefficients, −79 and 1601, is −126479.
+It turns out that the formula will produce 40 primes for the consecutive integer values $0 \leq n \leq 39$ . However, when $n = 40, 40^2 + 40 + 41 = 40(40 + 1) + 41$ is divisible by 41, and certainly when $n = 41, 41^2 + 41 + 41$ is clearly divisible by 41. 
+
+The incredible formula $n^2 - 79n + 1601$ was discovered, which produces 80 primes for the consecutive values $0 \leq n \leq 79$. The product of the coefficients, −79 and 1601, is −126479.
 
 Considering quadratics of the form: 
 
-n^2 + an + b, where |a| < 1000 and |b| <= 1000
+$n^2 + an + b$, where $| a | < 1000$ and $| b | <= 1000$
 
-where |n| is the modulus/absolute value of n
-e.g. |11| = 11 and |-4| = 4
+where $| n |$ is the modulus/absolute value of $n$
+e.g. $| 11 | = 11$ and $| -4 | = 4$
 
-Find the product of the coefficients, a and b, for the quadric expression that produces the maximum number of primes for consecutive values of n, starting with n = 0.\
+Find the product of the coefficients, $a$ and $b$, for the quadric expression that produces the maximum number of primes for consecutive values of $n$, starting with $n = 0$.
 
 [Оригинал](https://projecteuler.net/problem=27)
 
@@ -93,7 +94,7 @@ Find the product of the coefficients, a and b, for the quadric expression that p
 ### Решения: 
 
 <b>Python:</b>
-Решение при помощи прохода и вычисления уравнения для всех значений, с итерированием n до нахождения первого составного числа. 
+Решение при помощи прохода и вычисления уравнения для всех значений, с итерированием $n$ до нахождения первого составного числа. 
 ```python
 for a in range(-1000, 1000):
     for b in range(-1000, 1000):
@@ -127,7 +128,7 @@ for a in range(-1000, 1000):
             res = a * b
 ```
 <b>Хвостовая рекурсия, Seq.initInfinite, Seq.map:</b>
-Проходим по всем возможным комбинациям a и b. Длина последовательности из n находится путем создания бесконечного списка, содержащего в себе все значения выражения при итерировании n, после чего все составные значения меняются на ноль, для того, чтобы в последствии отделять часть последовательности до первого 0 и вернуть количество элементов последовательности. 
+Проходим по всем возможным комбинациям $a$ и $b$. Длина последовательности из n находится путем создания бесконечного списка, содержащего в себе все значения выражения при итерировании $n$, после чего все составные значения меняются на ноль, для того, чтобы в последствии отделять часть последовательности до первого 0 и вернуть количество элементов последовательности. 
 ```f#
 let rec findMaxSequenceInfSeq a b maxN res = 
     let isSimple n =
