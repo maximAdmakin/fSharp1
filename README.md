@@ -37,13 +37,10 @@ while i * i < value or res == 0:
 let rec findMaxPrimeFactorTail (value: uint64) (i: uint64) (d: uint64) (res: uint64) = 
     match value > (i * i) with
     | false -> res
-    | _ -> match i = d with
-            | false -> match i % d with 
-                        | 0UL -> findMaxPrimeFactorTail value (i + 1UL) 2UL res
-                        | _ -> findMaxPrimeFactorTail value i (d + 1UL) res
-            | _ -> match value % i with 
-                        | 0UL -> findMaxPrimeFactorTail value (i + 1UL) 2UL i
-                        | _ -> findMaxPrimeFactorTail value (i + 1UL) 2UL res
+    | true when i <> d && (i % d) = 0UL -> findMaxPrimeFactorTail value (i + 1UL) 2UL res
+    | true when i <> d && (i % d) > 0UL -> findMaxPrimeFactorTail value i (d + 1UL) res
+    | true when i = d && (value % i) = 0UL -> findMaxPrimeFactorTail value (i + 1UL) 2UL i
+    | _ -> findMaxPrimeFactorTail value (i + 1UL) 2UL res
 ```
 <b>Seq.initInfinite, Seq.filter, Seq.fold:</b>\
 Создаем бесконечный список из нечетных чисел, заменяя четные на ноль, после чего убираем все нули. 
@@ -127,10 +124,25 @@ for a in range(-1000, 1000):
             maxSimpleCounter = simpleCounter
             res = a * b
 ```
+<b>Хвостовая рекурсия:</b>
+Примерный аналог Python-решения. 
+```f#
+let rec findMaxSequenceTail n a b d maxN res =
+    let value = (n * n + a * n + b)
+    match b >= 1000 with
+        | false when value > 1 && value <> d && (value % d) = 0 -> findMaxSequenceTail 0 a (b + 1) 2 maxN res
+        | false when value > 1 && value <> d && (value % d) > 0 -> findMaxSequenceTail n a b (d + 1) maxN res
+        | false when value > 1 && value = d && maxN < n -> findMaxSequenceTail (n + 1) a b 2 n (a * b)
+        | false when value > 1 && value = d && (maxN > n || maxN = n) -> findMaxSequenceTail (n + 1) a b 2 maxN res
+        | false -> findMaxSequenceTail 0 a (b + 1) 2 maxN res
+        | true when a < 999 -> findMaxSequenceTail 0 (a + 1) -1000 2 maxN res
+        | _ -> res
+```
+
 <b>Хвостовая рекурсия, Seq.initInfinite, Seq.map:</b>
 Проходим по всем возможным комбинациям $a$ и $b$. Длина последовательности из n находится путем создания бесконечного списка, содержащего в себе все значения выражения при итерировании $n$, после чего все составные значения меняются на ноль, для того, чтобы в последствии отделять часть последовательности до первого нуля и вернуть количество элементов последовательности. 
 ```f#
-let rec findMaxSequenceInfSeq a b maxN res = 
+let rec findMaxSequenceInfSeq a b maxN res= 
     let isSimple n =
         let rec check i =
             n > 0 && (i > n/2 || (n % i <> 0 && check (i + 1)))
@@ -143,12 +155,10 @@ let rec findMaxSequenceInfSeq a b maxN res =
    
 
     match b >= 1000 with
-        | false -> match howManyPrimes a b > maxN with  
-                    | false -> findMaxSequenceInfSeq a (b + 1) maxN res  
-                    | true -> findMaxSequenceInfSeq a (b + 1) (howManyPrimes a b) (a * b)
-        | true -> match (a >= 999) with
-                    | false -> findMaxSequenceInfSeq (a + 1) -1000 maxN res
-                    | true -> res  
+        | false when howManyPrimes a b > maxN -> findMaxSequenceInfSeq a (b + 1) (howManyPrimes a b) (a * b)
+        | false -> findMaxSequenceInfSeq a (b + 1) maxN res 
+        | true when a < 999 -> findMaxSequenceInfSeq (a + 1) -1000 maxN res
+        | _ -> res
 ```
 ### Заключение: 
 Выполняя лабораторную работу на практике ознакомился с подходом к решению задач при помощи рекурсии (<b>rec</b>), последовательностей (<b>seq</b>, <b>Seq.initInfinite</b>) и операций над ними (<b>Seq.map</b>, <b>Seq.fold</b>, <b>Seq.filter</b> и т.д.). Синтаксис языка оказался простым и к нему быстро привыкаешь, однако с ходу начать писать код на F# может быть затруднительно (<b>|></b>, <b>| _ -></b> и т.д.). Также повышал продуктивность FSI, позволяющий сразу же проводить тестирование кода после его написания. Впервые попробовал GitHub Actions и написал CI проекта. 
