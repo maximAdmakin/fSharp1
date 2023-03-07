@@ -1,7 +1,8 @@
-﻿module Functions
+module Functions
 
 open System
 
+(*
 let rec findMaxPrimeFactorTail (value: uint64) (i: uint64) (d: uint64) (res: uint64) = 
     match value > (i * i) with
     | false -> res
@@ -12,6 +13,20 @@ let rec findMaxPrimeFactorTail (value: uint64) (i: uint64) (d: uint64) (res: uin
             | _ -> match value % i with 
                         | 0UL -> findMaxPrimeFactorTail value (i + 1UL) 2UL i
                         | _ -> findMaxPrimeFactorTail value (i + 1UL) 2UL res
+*)
+
+
+let rec findMaxPrimeFactorTail (value: uint64) (i: uint64) (d: uint64) (res: uint64) = 
+    match value > (i * i) with
+    | false -> res
+    | true when i <> d && (i % d) = 0UL -> findMaxPrimeFactorTail value (i + 1UL) 2UL res
+    | true when i <> d && (i % d) > 0UL -> findMaxPrimeFactorTail value i (d + 1UL) res
+    | true when i = d && (value % i) = 0UL -> findMaxPrimeFactorTail value (i + 1UL) 2UL i
+    | _ -> findMaxPrimeFactorTail value (i + 1UL) 2UL res
+    
+
+
+
 
 let findMaxPrimeFactorSeq (value: uint64) = 
     let isSimple n =
@@ -29,6 +44,7 @@ let findMaxPrimeFactorSeq (value: uint64) =
     
     numbers
 
+(*
 let rec findMaxSequenceTail n a b d maxN res =
     match b >= 1000 with
         | false -> match (n * n + a * n + b) > 1 with 
@@ -43,7 +59,20 @@ let rec findMaxSequenceTail n a b d maxN res =
         | true -> match (a >= 999) with
                     | false -> findMaxSequenceTail 0 (a + 1) -1000 2 maxN res
                     | true -> res
- 
+*)
+
+let rec findMaxSequenceTail n a b d maxN res =
+    let value = (n * n + a * n + b)
+    match b >= 1000 with
+        | false when value > 1 && value <> d && (value % d) = 0 -> findMaxSequenceTail 0 a (b + 1) 2 maxN res
+        | false when value > 1 && value <> d && (value % d) > 0 -> findMaxSequenceTail n a b (d + 1) maxN res
+        | false when value > 1 && value = d && maxN < n -> findMaxSequenceTail (n + 1) a b 2 n (a * b)
+        | false when value > 1 && value = d && (maxN > n || maxN = n) -> findMaxSequenceTail (n + 1) a b 2 maxN res
+        | false -> findMaxSequenceTail 0 a (b + 1) 2 maxN res
+        | true when a < 999 -> findMaxSequenceTail 0 (a + 1) -1000 2 maxN res
+        | _ -> res
+
+(*
 let rec findMaxSequenceInfSeq a b maxN res= 
     let isSimple n =
         let rec check i =
@@ -63,12 +92,22 @@ let rec findMaxSequenceInfSeq a b maxN res=
         | true -> match (a >= 999) with
                     | false -> findMaxSequenceInfSeq (a + 1) -1000 maxN res
                     | true -> res 
+*)
 
+let rec findMaxSequenceInfSeq a b maxN res= 
+    let isSimple n =
+        let rec check i =
+            n > 0 && (i > n/2 || (n % i <> 0 && check (i + 1)))
+        check 2
 
+    let howManyPrimes aSeq bSeq= Seq.initInfinite (fun n -> n * n + aSeq * n + bSeq) 
+                                |> Seq.map (fun index -> if isSimple(index) then index else 0)
+                                |> Seq.takeWhile (fun index -> index <> 0)
+                                |> Seq.length
+   
 
-
-                                                        
-
-
-
-    
+    match b >= 1000 with
+        | false when howManyPrimes a b > maxN -> findMaxSequenceInfSeq a (b + 1) (howManyPrimes a b) (a * b)
+        | false -> findMaxSequenceInfSeq a (b + 1) maxN res 
+        | true when a < 999 -> findMaxSequenceInfSeq (a + 1) -1000 maxN res
+        | _ -> res
