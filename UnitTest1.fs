@@ -18,4 +18,9 @@ let Test2 () =
 
 [<Test>]
 let Test3 () =
+    assert(findMaxSequenceTail 0 -999 -1000 2 0 0 = res27)
+
+[<Test>]
+let Test4 () =
     assert (findMaxSequenceInfSeq -999 -1000 0 0  = res27)
+    
