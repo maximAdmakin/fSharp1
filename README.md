@@ -90,7 +90,7 @@ Find the product of the coefficients, $a$ and $b$, for the quadric expression th
 <b>Ответ:</b> -59231
 ### Решения: 
 
-<b>Python:</b>
+<b>Python:</b>\
 Решение при помощи прохода и вычисления уравнения для всех значений, с итерированием $n$ до нахождения первого составного числа. 
 ```python
 for a in range(-1000, 1000):
@@ -124,7 +124,7 @@ for a in range(-1000, 1000):
             maxSimpleCounter = simpleCounter
             res = a * b
 ```
-<b>Хвостовая рекурсия:</b>
+<b>Хвостовая рекурсия:</b>\
 Примерный аналог Python-решения. 
 ```f#
 let rec findMaxSequenceTail n a b d maxN res =
@@ -139,7 +139,7 @@ let rec findMaxSequenceTail n a b d maxN res =
         | _ -> res
 ```
 
-<b>Хвостовая рекурсия, Seq.initInfinite, Seq.map:</b>
+<b>Хвостовая рекурсия, Seq.initInfinite, Seq.map:</b>\
 Проходим по всем возможным комбинациям $a$ и $b$. Длина последовательности из n находится путем создания бесконечного списка, содержащего в себе все значения выражения при итерировании $n$, после чего все составные значения меняются на ноль, для того, чтобы в последствии отделять часть последовательности до первого нуля и вернуть количество элементов последовательности. 
 ```f#
 let rec findMaxSequenceInfSeq a b maxN res= 
